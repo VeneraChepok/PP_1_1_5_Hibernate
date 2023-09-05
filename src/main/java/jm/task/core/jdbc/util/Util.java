@@ -14,27 +14,20 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
-    private static final String URL = "jdbc:mysql://localhost:3306/my_db_jdbc";
-    private static final String USERNAME = "bestuser";
-    private static final String PASSWORD = "bestuser";
-
+    private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/my_db_jdbc";
+    private static final String DB_USERNAME = "bestuser";
+    private static final String DB_PASSWORD = "bestuser";
     public Connection getConnection() {
         Connection connection = null;
-        Driver driver;
-
-        {
-            try {
-                driver = new com.mysql.cj.jdbc.Driver();
-                DriverManager.registerDriver(driver);
-
-                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                if (!connection.isClosed()) {
-                    System.out.println("Соединение установлено!");
-                }
-//                connection.close();
-            } catch (SQLException e) {
-                System.err.println("Не удалось загрузить класс Драйвер!");
+        try {
+            Class.forName(DB_DRIVER);
+            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            if (!connection.isClosed()) {
+                System.out.println("Соединение установлено!");
             }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Не удалось загрузить класс Драйвер!");
         }
         return connection;
     }
