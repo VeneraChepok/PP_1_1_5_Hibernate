@@ -27,7 +27,11 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+               try {
+                   transaction.rollback();
+               } catch (Exception ex) {
+                   throw new RuntimeException(ex);
+               }
             }
             System.out.println("Проблема с созданием таблицы Hibernate " + e.getStackTrace());
         }
@@ -43,7 +47,11 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+                try {
+                    transaction.rollback();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
             System.out.println("Проблема с удалением таблицы Hibernate " + e.getStackTrace());
         }
@@ -55,13 +63,17 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             Session session = Util.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            session.persist(new User(name, lastName, age));
+            session.save(new User(name, lastName, age));
             transaction.commit();
 
             System.out.println("User с именем - " + name + " успешно добавлен в базу данных Hibernate");
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+               try {
+                   transaction.rollback();
+               } catch (Exception ex) {
+                   throw new RuntimeException(ex);
+               }
             }
             System.out.println("Проблема с coхранением user Hibernate " + e.getStackTrace());
         }
@@ -71,13 +83,17 @@ public class UserDaoHibernateImpl implements UserDao {
     public void removeUserById(long id) {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
-            User user = session.get(User.class, id);
             transaction = session.beginTransaction();
-            session.remove(user);
+            User user = session.get(User.class, id);
+            session.delete(user);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+                try {
+                    transaction.rollback();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
             System.out.println("Проблема с удалением по id Hibernate " + e.getStackTrace());
         }
@@ -102,7 +118,11 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+               try {
+                   transaction.rollback();
+               } catch (Exception ex) {
+                   throw new RuntimeException(ex);
+               }
             }
             System.out.println("Проблема с очисткой таблицы" + e.getStackTrace());
         }
