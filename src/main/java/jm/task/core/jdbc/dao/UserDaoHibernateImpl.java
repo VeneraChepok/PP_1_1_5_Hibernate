@@ -30,7 +30,7 @@ public class UserDaoHibernateImpl implements UserDao {
                try {
                    transaction.rollback();
                } catch (Exception ex) {
-                   throw new RuntimeException(ex);
+                   System.out.println(ex);
                }
             }
             System.out.println("Проблема с созданием таблицы Hibernate " + e.getStackTrace());
@@ -50,7 +50,7 @@ public class UserDaoHibernateImpl implements UserDao {
                 try {
                     transaction.rollback();
                 } catch (Exception ex) {
-                    throw new RuntimeException(ex);
+                    System.out.println(ex);
                 }
             }
             System.out.println("Проблема с удалением таблицы Hibernate " + e.getStackTrace());
@@ -72,7 +72,7 @@ public class UserDaoHibernateImpl implements UserDao {
                try {
                    transaction.rollback();
                } catch (Exception ex) {
-                   throw new RuntimeException(ex);
+                   System.out.println(ex);
                }
             }
             System.out.println("Проблема с coхранением user Hibernate " + e.getStackTrace());
@@ -84,15 +84,15 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            User user = session.get(User.class, id);
-            session.delete(user);
+ //           User user = session.get(User.class, id);
+            session.remove(id);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 try {
                     transaction.rollback();
                 } catch (Exception ex) {
-                    throw new RuntimeException(ex);
+                    System.out.println(ex);
                 }
             }
             System.out.println("Проблема с удалением по id Hibernate " + e.getStackTrace());
@@ -121,7 +121,7 @@ public class UserDaoHibernateImpl implements UserDao {
                try {
                    transaction.rollback();
                } catch (Exception ex) {
-                   throw new RuntimeException(ex);
+                   System.out.println(ex);
                }
             }
             System.out.println("Проблема с очисткой таблицы" + e.getStackTrace());
