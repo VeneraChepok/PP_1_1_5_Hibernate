@@ -4,6 +4,7 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -27,11 +28,11 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-               try {
-                   transaction.rollback();
-               } catch (Exception ex) {
-                   System.out.println(ex);
-               }
+                try {
+                    transaction.rollback();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
             }
             System.out.println("Проблема с созданием таблицы Hibernate " + e.getStackTrace());
         }
@@ -69,11 +70,11 @@ public class UserDaoHibernateImpl implements UserDao {
             System.out.println("User с именем - " + name + " успешно добавлен в базу данных Hibernate");
         } catch (Exception e) {
             if (transaction != null) {
-               try {
-                   transaction.rollback();
-               } catch (Exception ex) {
-                   System.out.println(ex);
-               }
+                try {
+                    transaction.rollback();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
             }
             System.out.println("Проблема с coхранением user Hibernate " + e.getStackTrace());
         }
@@ -84,8 +85,10 @@ public class UserDaoHibernateImpl implements UserDao {
         Transaction transaction = null;
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
- //           User user = session.get(User.class, id);
-            session.remove(id);
+            Query<User> query = session.createSQLQuery("DELETE FROM users WHERE id =:id");
+            query.setParameter("id", id);
+            query.executeUpdate();
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -118,11 +121,11 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-               try {
-                   transaction.rollback();
-               } catch (Exception ex) {
-                   System.out.println(ex);
-               }
+                try {
+                    transaction.rollback();
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
             }
             System.out.println("Проблема с очисткой таблицы" + e.getStackTrace());
         }
